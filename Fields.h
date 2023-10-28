@@ -12,6 +12,7 @@ class Field{
         Field();
         virtual int hasBomb()=0;
         virtual char symbol()=0;
+        virtual void setNumofBombsDirect(int)=0;
 };
 
 class SafeField : public Field {
@@ -23,6 +24,7 @@ class SafeField : public Field {
         SafeField(int,int);
         int hasBomb() override;
         char symbol() override;
+        void setNumofBombsDirect(int) override;
 };
 
 class BombField : public Field {
@@ -31,6 +33,7 @@ class BombField : public Field {
         BombField();
         int hasBomb() override;
         char symbol() override;
+        void setNumofBombsDirect(int) override;
 };
 
 class Board{
@@ -42,5 +45,7 @@ class Board{
 
     public: 
         Board(int,int);
+        Board(int,int,int);
         void drawBoard();
+        void setNumOfBombs(int,int);
 };

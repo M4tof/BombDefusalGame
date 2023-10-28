@@ -1,8 +1,7 @@
 #include "Fields.h"
-#include <iostream>
 
 int main() {
-    Board gameBoard(5, 5);
+    Board gameBoard(5, 5, 2);
 
     gameBoard.drawBoard(); 
 
