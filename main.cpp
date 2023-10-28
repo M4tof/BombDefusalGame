@@ -1,18 +1,10 @@
-#include <iostream>
 #include "Fields.h"
-#include <unistd.h>
+#include <iostream>
 
-void clearScreen(){
-	const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
-  write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
-}
+int main() {
+    Board gameBoard(5, 5);
 
-using namespace std;
-int main(int argc, char *argv[]){
+    gameBoard.drawBoard(); 
 
-	Board Plansza(5,5);
-	Plansza.placeBombs(3);
-	Plansza.drawBoard();
-	
-	return 0;
+    return 0;
 }

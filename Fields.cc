@@ -6,81 +6,89 @@
 
 using namespace std;
 
-Field::Field(int posX,int posY,int _num){
+Field::Field(int posX,int posY){
     this->X = posX;
     this->Y = posY;
-    this->num = _num;
 }
 
 Field::Field(){
     this->X = -1;
     this->Y = -1;
-    this->num = -1;
 }
 
 
-int Field::hasBomb(){
-    if(this->bombFlag == 1){
-        return 1;
-    }
-    else{
-        return 0;
-    }
+
+SafeField::SafeField(int posX,int posY){
+    this->X = posX;
+    this->Y = posY;
 }
 
-void Field::plantBomb(){
-    this->bombFlag=1;
+SafeField::SafeField(){
+    this->X = -1;
+    this->Y = -1;
 }
+
+int SafeField::hasBomb(){
+    return 0;
+}
+
+char SafeField::symbol(){
+    return 's';
+}
+
+
+
+BombField::BombField(int posX,int posY){
+    this->X = posX;
+    this->Y = posY;
+}
+
+BombField::BombField(){
+    this->X = -1;
+    this->Y = -1;
+}
+
+int BombField::hasBomb(){
+    return 1;
+}
+
+char BombField::symbol(){
+    return 'b';
+}
+
+
 
 Board::Board(int _width,int _height){
     this->width = _width;
     this->height = _height;
     this->nrOfFields = width*height;
-    
-    fieldsContainer = new Field*[width];
-    for (int i = 0; i < width; ++i){
-        fieldsContainer[i] = new Field[height];
-    }
-    int n=0;
-    for(int x = 0; x < width; x++) {
-        for(int y = 0; y < height; y++) {
-            fieldsContainer[x][y] = Field(x,y,n);
-            n++;
+    boardFields.resize(width,std::vector<Field*>(height,nullptr));
+
+    int numOfBombs = _width * _height /3;
+    srand(time(NULL));
+    while (numOfBombs >0){
+        int x = rand() %  _width;
+        int y = rand() % _height;
+        if(boardFields[x][y]==nullptr){
+            boardFields[x][y] = new BombField(x, y);
+            numOfBombs--;
         }
     }
-}
-
-Board::~Board(){
-    for (int i = 0; i < width; ++i) {
-        delete[] fieldsContainer[i];
+    for(int i=0;i<_width;i++){
+        for(int j=0;j<_height;j++){
+            if(boardFields[i][j] == nullptr){
+                boardFields[i][j] = new SafeField(i,j);
+            }
+        }
     }
-    delete[] fieldsContainer;
+
 }
 
 void Board::drawBoard(){
     for(int x=0;x<this->width;x++){
         for(int y=0;y<this->height;y++){
-            if(fieldsContainer[x][y].hasBomb()){
-                cout <<"* ";
-            }
-            else{
-                cout << "0 ";
-            }
+            cout << boardFields[x][y]->symbol() << " ";
         }
         cout << endl;
-    }
-}
-
-void Board::placeBombs(int numOfBombs){
-    srand(time(NULL));
-
-    int bombs2Plant = numOfBombs;
-    while(bombs2Plant>0){
-        int randomX = rand() % this ->width;
-        int randomY = rand() % this ->height;
-        if (this->fieldsContainer[randomX][randomY].hasBomb() != 1){
-            this->fieldsContainer[randomX][randomY].plantBomb();
-            bombs2Plant--;
-        }
     }
 }

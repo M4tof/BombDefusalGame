@@ -1,18 +1,36 @@
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
 class Field{
-    private:
+    protected:
         int X;
         int Y;
-        int num;
-        int bombFlag=0;
     public:
-        Field(int,int,int);
+        Field(int,int);
         Field();
-        int hasBomb();
-        void plantBomb();
+        virtual int hasBomb()=0;
+        virtual char symbol()=0;
+};
+
+class SafeField : public Field {
+    private:
+        int numofBombs=0;
+        int wasRevealed=0;
+    public:
+        SafeField();
+        SafeField(int,int);
+        int hasBomb() override;
+        char symbol() override;
+};
+
+class BombField : public Field {
+    public:
+        BombField(int,int);
+        BombField();
+        int hasBomb() override;
+        char symbol() override;
 };
 
 class Board{
@@ -20,11 +38,9 @@ class Board{
         int width;
         int height;
         int nrOfFields;
-        Field** fieldsContainer;
+        std::vector<std::vector<Field*>> boardFields;
+
     public: 
         Board(int,int);
-        ~Board();
         void drawBoard();
-        void placeBombs(int);
-        int bombsAround(int, int);
 };
