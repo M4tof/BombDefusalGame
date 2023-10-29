@@ -8,7 +8,7 @@
 int main() {
     // create the window
     sf::Texture textura;
-    if (!textura.loadFromFile("./images/Box.png")) {
+    if (!textura.loadFromFile("./images/Normal.png")) {
         std::cout << "ERROR" << std::endl;
         return -1;
     }
@@ -16,7 +16,7 @@ int main() {
     textura.setRepeated(false);
 
     sf::Texture clicked;
-    if(!clicked.loadFromFile("./images/Normal.png")){
+    if(!clicked.loadFromFile("./images/Box.png")){
         std::cout << "ERROR" << std::endl;
         return -1; 
     }
@@ -52,7 +52,7 @@ int main() {
                     if(posX >= 0 && posX < 5 && posY >= 0 && posY <5){
                         Sprites[posX][posY].setTexture(clicked);
                     }
-                    std::cout << "Mouse pressed on " << posY << " " << posX << std::endl;
+                    std::cout << "Mouse pressed on x: " << posY << "y: " << posX << std::endl;
                     break;
                 
                 default:
