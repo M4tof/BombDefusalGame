@@ -12,23 +12,19 @@ int main() {
         std::cout << "ERROR" << std::endl;
         return -1;
     }
-    textura.setSmooth(true);
-    textura.setRepeated(false);
 
     sf::Texture clicked;
     if(!clicked.loadFromFile("./images/Box.png")){
         std::cout << "ERROR" << std::endl;
         return -1; 
     }
-    clicked.setSmooth(true);
-    clicked.setRepeated(false);
 
-    sf::RenderWindow window(sf::VideoMode(160, 160), "Test",sf::Style::Titlebar | sf::Style::Close);
+    sf::RenderWindow window(sf::VideoMode(256, 256), "Test",sf::Style::Titlebar | sf::Style::Close);
 
-    std::vector<std::vector<sf::Sprite>> Sprites(5, std::vector<sf::Sprite>(5, sf::Sprite(textura)));
+    std::vector<std::vector<sf::Sprite>> Sprites(8, std::vector<sf::Sprite>(8, sf::Sprite(textura)));
     
-    for (int x = 0; x < 5; x++) {
-        for (int y=0;y<5;y++){
+    for (int x = 0; x < 8; x++) {
+        for (int y=0;y<8;y++){
         Sprites[x][y].setPosition(sf::Vector2f(0.f + (x * 32), 0.f + (y * 32)));
         }
     }
@@ -49,7 +45,7 @@ int main() {
                 case sf::Event::MouseButtonPressed:
                     posX = sf::Mouse::getPosition(window).x /32;
                     posY = sf::Mouse::getPosition(window).y /32;
-                    if(posX >= 0 && posX < 5 && posY >= 0 && posY <5){
+                    if(posX >= 0 && posX < 8 && posY >= 0 && posY <8){
                         Sprites[posX][posY].setTexture(clicked);
                     }
                     std::cout << "Mouse pressed on x: " << posY << "y: " << posX << std::endl;
@@ -64,8 +60,8 @@ int main() {
         // clear the window with black color
         window.clear(sf::Color::Black);
 
-        for (int x = 0; x < 5; x++) {
-            for (int y=0;y<5;y++){
+        for (int x = 0; x < 8; x++) {
+            for (int y=0;y<8;y++){
             window.draw(Sprites[x][y]);
             }
         }

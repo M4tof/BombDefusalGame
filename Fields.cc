@@ -32,6 +32,17 @@ char SafeField::symbol(){
 void SafeField::setNumofBombsDirect(int num){
     this->numofBombs = num;
 }
+void SafeField::reveal(){
+    this->hidden=0;
+}
+int SafeField::whatToDraw(){
+    if(this->hidden == 1){
+        return -1;
+    }
+    else{
+        return this->numofBombs;
+    }
+}
 
 
 BombField::BombField(int posX,int posY){
@@ -49,7 +60,17 @@ char BombField::symbol(){
     return 'B';
 }
 void BombField::setNumofBombsDirect(int num){}
-
+void BombField::reveal(){
+    this->hidden=0;
+}
+int BombField::whatToDraw(){
+    if(this->hidden == 1){
+        return -1;
+    }
+    else{
+        return 9;
+    }
+}
 
 void Board::setNumOfBombs(int x,int y){
     int bombs=0;
@@ -130,4 +151,12 @@ void Board::drawBoard(){
         }
         cout << endl;
     }
+}
+
+void Board::revealField(int x,int y){
+    this->boardFields[x][y]->reveal();
+}
+
+int Board::whatToDrawHere(int x, int y){
+    return this->boardFields[x][y]->whatToDraw();
 }
