@@ -37,11 +37,22 @@ void SafeField::reveal(){
 }
 int SafeField::whatToDraw(){
     if(this->hidden == 1){
-        return -1;
+        if(this->flagged ==1){
+            return 10;
+        }
+        else{
+            return -1;
+        }
     }
     else{
         return this->numofBombs;
     }
+}
+void SafeField::setFlag(){
+    this->flagged = !(this->flagged);
+}
+int SafeField::isDefused(){
+    return 1;
 }
 
 
@@ -65,11 +76,29 @@ void BombField::reveal(){
 }
 int BombField::whatToDraw(){
     if(this->hidden == 1){
-        return -1;
+        if(this->flagged ==1){
+            return 10;
+        }
+        else{
+            return -1;
+        }
     }
     else{
         return 9;
     }
+}
+void BombField::setFlag(){
+    this->flagged = !(this->flagged);
+    
+    if(this->flagged){
+        this->defusedFlag=1;
+    }
+    else{
+        this->defusedFlag=0;
+    }
+}
+int BombField::isDefused(){
+    return this->defusedFlag;
 }
 
 void Board::setNumOfBombs(int x,int y){
@@ -152,11 +181,39 @@ void Board::drawBoard(){
         cout << endl;
     }
 }
-
 void Board::revealField(int x,int y){
     this->boardFields[x][y]->reveal();
 }
-
 int Board::whatToDrawHere(int x, int y){
     return this->boardFields[x][y]->whatToDraw();
+}
+void Board::setFlagHere(int x,int y){
+    this->boardFields[x][y]->setFlag();
+}
+
+int Board::gameOver(){ //REWORK
+    int correct=0;
+    for(int x=0;x<this->width;x++){
+        for(int y=0;y<this->height;y++){
+            
+            if(!boardFields[x][y]->hasBomb()){ //in SafeField
+                if(boardFields[x][y]->whatToDraw()>=0 && boardFields[x][y]->whatToDraw()<=8){
+                    correct++;
+                }
+            }
+            else{ //in BombField
+                if(boardFields[x][y]->isDefused()){
+                    correct++;
+                }
+            }
+        
+        }
+    }
+
+    if(correct==this->nrOfFields){
+        return 1;
+    }
+    else{
+        return 0;
+    }
 }

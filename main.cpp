@@ -4,13 +4,19 @@
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
+#include<unistd.h>
 #include <iostream>
 
-#define ROW 8
-#define COL 8
-#define BOMBS 10
+int main(int argc, char*argv[]) {
+    int ROW = 8;
+    int COL = 8;
+    int BOMBS = 10;
+    if(argc==4){
+        ROW = atoi(argv[1]);
+        COL = atoi(argv[2]);
+        BOMBS = atoi(argv[3]);
+    }
 
-int main() {
     sf::Texture Blank; //-1
     sf::Texture T0;    //0
     sf::Texture T1;    //1
@@ -31,6 +37,20 @@ int main() {
         return -1;
     }
     
+    int GAMEOVER=0;
+    sf::Text GameFailed;
+    sf::Font font;
+    
+    font.loadFromFile("Arial.ttf");
+    GameFailed.setFont(font);
+    GameFailed.setString("GAME OVER");
+    GameFailed.setCharacterSize(32);
+    GameFailed.setFillColor(sf::Color::Red);
+    GameFailed.setOutlineColor(sf::Color::Black);
+    GameFailed.setOutlineThickness(6);
+    GameFailed.setStyle(sf::Text::Bold | sf::Text::Underlined);
+    GameFailed.setPosition(sf::Vector2f(0.f + (ROW*2), 0.f + (COL * 8)));
+
 
 
     sf::RenderWindow window(sf::VideoMode((32*ROW), (32*COL)), "BombDefusal",sf::Style::Titlebar | sf::Style::Close);
@@ -42,10 +62,12 @@ int main() {
         Sprites[x][y].setPosition(sf::Vector2f(0.f + (x * 32), 0.f + (y * 32)));
         }
     }
+
     while (window.isOpen()){
         sf::Event event;
         int posX;
         int posY;
+        
         while (window.pollEvent(event)){
             
             switch (event.type) {
@@ -55,14 +77,21 @@ int main() {
                     break;
                 
                 case sf::Event::MouseButtonPressed:
+                        posX = sf::Mouse::getPosition(window).x /32;
+                        posY = sf::Mouse::getPosition(window).y /32;
                     
-                    posX = sf::Mouse::getPosition(window).x /32;
-                    posY = sf::Mouse::getPosition(window).y /32;
-                    
-                    if(posX >= 0 && posX < ROW && posY >= 0 && posY < COL){
-                        gameBoard.revealField(posX,posY);
+                    if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+                        if(posX >= 0 && posX < ROW && posY >= 0 && posY < COL){
+                            gameBoard.revealField(posX,posY);
+                        }
                     }
-                    
+                    if(sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+                        if(posX >= 0 && posX < ROW && posY >= 0 && posY < COL){
+                            gameBoard.setFlagHere(posX,posY);
+                            std::cout << "Flag set" << std::endl;
+                        }
+                    }
+
                     std::cout << "Mouse pressed on x: " << posY << " y: " << posX << std::endl;
                     break;
                 
@@ -73,8 +102,8 @@ int main() {
     
         window.clear();
 
-        for (int x = 0; x < 8; x++) {
-            for (int y=0;y<8;y++){
+        for (int x = 0; x < ROW; x++) {
+            for (int y=0;y<COL;y++){
 
                 switch (gameBoard.whatToDrawHere(x,y)){
                 case -1:
@@ -109,6 +138,12 @@ int main() {
                     break;
                 case 9:
                     Sprites[x][y].setTexture(Detonated);
+                    std::cout << "BOMB HAS BEEN DETONATED, MISSION FAILED" << std::endl;
+                    GAMEOVER=1;
+                    window.draw(GameFailed);
+                    break;
+                case 10:
+                    Sprites[x][y].setTexture(Flaged);
                     break;
                 default:
                     break;
@@ -116,7 +151,24 @@ int main() {
                 window.draw(Sprites[x][y]);
             }
         }
+
         window.display();
+        if(GAMEOVER==1){
+            window.draw(GameFailed);
+            window.display();
+            sleep(3);
+            exit(0);
+        }
+        if(gameBoard.gameOver()){
+            GameFailed.setString("YOU WON");
+            GameFailed.setFillColor(sf::Color::Green);
+            window.draw(GameFailed);
+            window.display();
+            sleep(3);
+            exit(0);
+        }
+
+
     }
 
     return 0;

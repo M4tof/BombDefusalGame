@@ -43,12 +43,22 @@ int main() {
                     break;
                 
                 case sf::Event::MouseButtonPressed:
-                    posX = sf::Mouse::getPosition(window).x /32;
-                    posY = sf::Mouse::getPosition(window).y /32;
-                    if(posX >= 0 && posX < 8 && posY >= 0 && posY <8){
-                        Sprites[posX][posY].setTexture(clicked);
+                    if(sf::Mouse::isButtonPressed(sf::Mouse::Right)){
+                        posX = sf::Mouse::getPosition(window).x /32;
+                        posY = sf::Mouse::getPosition(window).y /32;
+                        if(posX >= 0 && posX < 8 && posY >= 0 && posY <8){
+                            Sprites[posX][posY].setTexture(clicked);
+                        }
+                        std::cout << "Mouse pressed on x: " << posY << "y: " << posX << std::endl;
                     }
-                    std::cout << "Mouse pressed on x: " << posY << "y: " << posX << std::endl;
+                    if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
+                        posX = sf::Mouse::getPosition(window).x /32;
+                        posY = sf::Mouse::getPosition(window).y /32;
+                        if(posX >= 0 && posX < 8 && posY >= 0 && posY <8){
+                            Sprites[posX][posY].setTexture(textura);
+                        }
+                        std::cout << "Mouse pressed on x: " << posY << "y: " << posX << std::endl;
+                    }
                     break;
                 
                 default:
