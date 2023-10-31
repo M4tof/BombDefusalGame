@@ -11,6 +11,11 @@ int main(int argc, char*argv[]) {
     int ROW = 8;
     int COL = 8;
     int BOMBS = 10;
+    if(argc==3){
+        ROW = atoi(argv[1]);
+        COL = atoi(argv[2]);
+        BOMBS = ROW*COL/3;
+    }
     if(argc==4){
         ROW = atoi(argv[1]);
         COL = atoi(argv[2]);
@@ -55,7 +60,9 @@ int main(int argc, char*argv[]) {
 
     sf::RenderWindow window(sf::VideoMode((32*ROW), (32*COL)), "BombDefusal",sf::Style::Titlebar | sf::Style::Close);
     std::vector<std::vector<sf::Sprite>> Sprites(ROW, std::vector<sf::Sprite>(COL, sf::Sprite(Blank)));
+    
     Board gameBoard(ROW, COL, BOMBS);
+    int firstClickFLag=1;
 
     for (int x = 0; x < ROW; x++) {
         for (int y=0;y<COL;y++){
@@ -64,6 +71,11 @@ int main(int argc, char*argv[]) {
     }
 
     while (window.isOpen()){
+        /*
+        if(firstClickFLag){
+            move mouse to first found safe
+        }
+        */
         sf::Event event;
         int posX;
         int posY;
@@ -83,6 +95,17 @@ int main(int argc, char*argv[]) {
                     if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
                         if(posX >= 0 && posX < ROW && posY >= 0 && posY < COL){
                             gameBoard.revealField(posX,posY);
+                            /*
+                            if(firstClickFLag){
+                                firstClickFLag=0;
+                                if field has bomb, flag it insted
+                                else
+                                gameBoard.revealField(posX,posY);
+                                if(gameBoard.whatToDrawHere(posX,posY) !=0){
+                                    reveal all adjacent non bombs
+                                }
+                            }
+                            */
                         }
                     }
                     if(sf::Mouse::isButtonPressed(sf::Mouse::Right)){

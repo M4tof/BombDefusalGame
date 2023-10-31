@@ -101,6 +101,7 @@ int BombField::isDefused(){
     return this->defusedFlag;
 }
 
+
 void Board::setNumOfBombs(int x,int y){
     int bombs=0;
     for(int i=-1;i<=1;i++){
@@ -182,7 +183,26 @@ void Board::drawBoard(){
     }
 }
 void Board::revealField(int x,int y){
-    this->boardFields[x][y]->reveal();
+    if(x<0||x>=width || y<0|| y>=height){
+        return;
+    }
+    if(boardFields[x][y]->whatToDraw() != -1){
+        return;
+    }
+
+    boardFields[x][y]->reveal();
+    
+    if (boardFields[x][y]->whatToDraw()==0){
+        for(int i=-1;i<=1;i++){
+            for(int j=-1;j<=1;j++){
+                    this->revealField(x+i,y+j);
+            }
+        }
+    }
+    else{
+        return;
+    }
+
 }
 int Board::whatToDrawHere(int x, int y){
     return this->boardFields[x][y]->whatToDraw();
@@ -191,7 +211,7 @@ void Board::setFlagHere(int x,int y){
     this->boardFields[x][y]->setFlag();
 }
 
-int Board::gameOver(){ //REWORK
+int Board::gameOver(){
     int correct=0;
     for(int x=0;x<this->width;x++){
         for(int y=0;y<this->height;y++){
