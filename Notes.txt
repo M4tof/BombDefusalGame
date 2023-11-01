@@ -1,0 +1,6 @@
+Albo firstclick reveal 8 adjacent + if bomb flag
+albo Fake board na start, firstclick make safe
+		(0-8)i potem dopiero makeboard
+albo if firstclick na bombie to zmien pole na 
+		safeField i przenieś bombe na pierwszy 
+		znaleniony safeField od (0,0)
