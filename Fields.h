@@ -66,5 +66,7 @@ class Board{
         void revealField(int,int);
         int whatToDrawHere(int,int);
         void setFlagHere(int,int);
+        void firstClickHandler(int,int);
         int gameOver();
+        ~Board();
 };

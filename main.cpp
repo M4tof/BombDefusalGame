@@ -49,12 +49,12 @@ int main(int argc, char*argv[]) {
     font.loadFromFile("Arial.ttf");
     GameFailed.setFont(font);
     GameFailed.setString("GAME OVER");
-    GameFailed.setCharacterSize(32);
+    GameFailed.setCharacterSize(32*(ROW/8));
     GameFailed.setFillColor(sf::Color::Red);
     GameFailed.setOutlineColor(sf::Color::Black);
     GameFailed.setOutlineThickness(6);
     GameFailed.setStyle(sf::Text::Bold | sf::Text::Underlined);
-    GameFailed.setPosition(sf::Vector2f(0.f + (ROW*2), 0.f + (COL * 8)));
+    GameFailed.setPosition(sf::Vector2f(0.f + (ROW*16) - GameFailed.getLocalBounds().width/2 , 0.f + (COL * 16) - GameFailed.getLocalBounds().height/2 ));
 
 
 
@@ -71,11 +71,6 @@ int main(int argc, char*argv[]) {
     }
 
     while (window.isOpen()){
-        /*
-        if(firstClickFLag){
-            move mouse to first found safe
-        }
-        */
         sf::Event event;
         int posX;
         int posY;
@@ -94,18 +89,13 @@ int main(int argc, char*argv[]) {
                     
                     if(sf::Mouse::isButtonPressed(sf::Mouse::Left)){
                         if(posX >= 0 && posX < ROW && posY >= 0 && posY < COL){
-                            gameBoard.revealField(posX,posY);
-                            /*
+                            
                             if(firstClickFLag){
                                 firstClickFLag=0;
-                                if field has bomb, flag it insted
-                                else
-                                gameBoard.revealField(posX,posY);
-                                if(gameBoard.whatToDrawHere(posX,posY) !=0){
-                                    reveal all adjacent non bombs
-                                }
+                                gameBoard.firstClickHandler(posX,posY);
                             }
-                            */
+                            
+                            gameBoard.revealField(posX,posY);
                         }
                     }
                     if(sf::Mouse::isButtonPressed(sf::Mouse::Right)){

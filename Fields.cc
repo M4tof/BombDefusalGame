@@ -237,3 +237,44 @@ int Board::gameOver(){
         return 0;
     }
 }
+
+Board::~Board(){
+    for(int x=0;x<this->width;x++){
+        for(int y=0;y<this->height;y++){
+            delete boardFields[x][y];
+        }
+    }
+    std::cout << "Memory released succesfully" << std::endl;
+}
+
+void Board::firstClickHandler(int posX, int posY){
+    if(boardFields[posX][posY]->hasBomb()){
+        std::cout << "Had to use firstClickHandler ";
+        int safeX =-1;
+        int safeY =-1;
+
+        for(int x=0;x<this->width;x++){
+            for(int y=0;y<this->height;y++){
+                if(boardFields[x][y]->hasBomb() == 0 && safeX == -1 && safeY == -1){
+                    safeX=x;
+                    safeY=y;
+                }
+            }
+        }
+        
+        if (safeX != -1 && safeY != -1){
+            delete boardFields[safeX][safeY];
+            boardFields[safeX][safeY] = new BombField(safeX,safeY);
+            
+            delete boardFields[posX][posY];
+            boardFields[posX][posY] = new SafeField(posX,posY);
+            setNumOfBombs(posX,posY);
+            std::cout << ", used it succesfully "<< std::endl;
+        }
+
+        else{
+            std::cout << ", but it failed" << std::endl;
+        }
+
+    }
+}
