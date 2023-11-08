@@ -1,24 +1,23 @@
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
-class Field{
+class Field{            //wzorcowy rodzic
     protected:
         int X;
         int Y;
-        int hidden=1;
-        int flagged=0;
+        int hidden=1;  //czy dane pole ma stan ukryty (tekstura -1)
+        int flagged=0; //czy dane pole zostało oflagowane
     public:
         Field(int,int);
-        Field();
-        virtual int hasBomb()=0;
-        virtual char symbol()=0;
-        virtual void setNumofBombsDirect(int)=0;
-        virtual void reveal()=0;
-        virtual int whatToDraw()=0;
-        virtual void setFlag()=0;
-        virtual int isDefused()=0;
+        Field();                    
+        virtual int hasBomb()=0;                    // czy na polu jest bomba
+        virtual char symbol()=0;                    // Zwraca symbol dla rysunku w terminalu (LEGACY METHOD)
+        virtual void setNumofBombsDirect(int)=0;    // Ustawia wartość int numofBombs w SafeField, nic w BombField
+        virtual void reveal()=0;                    // Zmienia stan flagi int hidden na false, sprawia, że pole jest ujawnione
+        virtual int whatToDraw()=0;                 // Metoda kontrolująca co powinno zostać wyświetlone w okienku na danym polu
+        virtual void setFlag()=0;                   // Zmienia stan flagi int flagged na przeciwny do aktualnego, stawia lub usuwa oznaczenia flagi na polu
+        virtual int isDefused()=0;                  // Zwraca stan aktywności bomby, dla SafeField zawsze true, dla BombField zależne od stanu flagi defusedFlag
 };
 
 class SafeField : public Field {
@@ -51,22 +50,3 @@ class BombField : public Field {
         int isDefused() override;
 };
 
-class Board{
-    private:
-        int width;
-        int height;
-        int nrOfFields;
-        std::vector<std::vector<Field*>> boardFields;
-
-    public: 
-        Board(int,int);
-        Board(int,int,int);
-        void drawBoard();
-        void setNumOfBombs(int,int);
-        void revealField(int,int);
-        int whatToDrawHere(int,int);
-        void setFlagHere(int,int);
-        void firstClickHandler(int,int);
-        int gameOver();
-        ~Board();
-};

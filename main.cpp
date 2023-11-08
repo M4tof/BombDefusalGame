@@ -1,11 +1,11 @@
-#include "Fields.h"
+#include "Board.h"
+
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/Network.hpp>
-#include<unistd.h>
-#include <iostream>
+#include <unistd.h>
 
 int main(int argc, char*argv[]) {
     int ROW = 8;
@@ -59,8 +59,8 @@ int main(int argc, char*argv[]) {
 
 
     sf::RenderWindow window(sf::VideoMode((32*ROW), (32*COL)), "BombDefusal",sf::Style::Titlebar | sf::Style::Close);
-    std::vector<std::vector<sf::Sprite>> Sprites(ROW, std::vector<sf::Sprite>(COL, sf::Sprite(Blank)));
     
+    std::vector<std::vector<sf::Sprite>> Sprites(ROW, std::vector<sf::Sprite>(COL, sf::Sprite(Blank)));
     Board gameBoard(ROW, COL, BOMBS);
     int firstClickFLag=1;
 
@@ -116,50 +116,50 @@ int main(int argc, char*argv[]) {
         window.clear();
 
         for (int x = 0; x < ROW; x++) {
-            for (int y=0;y<COL;y++){
+            for (int y = 0; y < COL; y++){
 
                 switch (gameBoard.whatToDrawHere(x,y)){
-                case -1:
-                    Sprites[x][y].setTexture(Blank);
-                    break;
-                case 0:
-                    Sprites[x][y].setTexture(T0);
-                    break;
-                case 1:
-                    Sprites[x][y].setTexture(T1);
-                    break;
-                case 2:
-                    Sprites[x][y].setTexture(T2);
-                    break;
-                case 3:
-                    Sprites[x][y].setTexture(T3);
-                    break;
-                case 4:
-                    Sprites[x][y].setTexture(T4);
-                    break;                    
-                case 5:
-                    Sprites[x][y].setTexture(T5);
-                    break;
-                case 6:
-                    Sprites[x][y].setTexture(T6);
-                    break;
-                case 7:
-                    Sprites[x][y].setTexture(T7);
-                    break;
-                case 8:
-                    Sprites[x][y].setTexture(T8);
-                    break;
-                case 9:
-                    Sprites[x][y].setTexture(Detonated);
-                    std::cout << "BOMB HAS BEEN DETONATED, MISSION FAILED" << std::endl;
-                    GAMEOVER=1;
-                    window.draw(GameFailed);
-                    break;
-                case 10:
-                    Sprites[x][y].setTexture(Flaged);
-                    break;
-                default:
-                    break;
+                    case -1:
+                        Sprites[x][y].setTexture(Blank);
+                        break;
+                    case 0:
+                        Sprites[x][y].setTexture(T0);
+                        break;
+                    case 1:
+                        Sprites[x][y].setTexture(T1);
+                        break;
+                    case 2:
+                        Sprites[x][y].setTexture(T2);
+                        break;
+                    case 3:
+                        Sprites[x][y].setTexture(T3);
+                        break;
+                    case 4:
+                        Sprites[x][y].setTexture(T4);
+                        break;                    
+                    case 5:
+                        Sprites[x][y].setTexture(T5);
+                        break;
+                    case 6:
+                        Sprites[x][y].setTexture(T6);
+                        break;
+                    case 7:
+                        Sprites[x][y].setTexture(T7);
+                        break;
+                    case 8:
+                        Sprites[x][y].setTexture(T8);
+                        break;
+                    case 9:
+                        Sprites[x][y].setTexture(Detonated);
+                        std::cout << "BOMB HAS BEEN DETONATED, MISSION FAILED" << std::endl;
+                        GAMEOVER=1;
+                        window.draw(GameFailed);
+                        break;
+                    case 10:
+                        Sprites[x][y].setTexture(Flaged);
+                        break;
+                    default:
+                        break;
                 }
                 window.draw(Sprites[x][y]);
             }

@@ -1,6 +1,15 @@
-Albo firstclick reveal 8 adjacent + if bomb flag
-albo Fake board na start, firstclick make safe
-		(0-8)i potem dopiero makeboard
-albo if firstclick na bombie to zmien pole na 
-		safeField i przenieś bombe na pierwszy 
-		znaleniony safeField od (0,0)
+ENKAPSULACJA:
+	-Wszystko jest w Board, w nim są Field'y które mają kluczowe wartości
+	-Użytkownik -> Program -> Board(Filed,Field,Field,....)
+
+ABSTRAKCJA:
+	-setFlag poprostu się dzieje, Użytkownik nie musi wiedzieć że za to jest odpowiedzialny int(flaga) który jest potem sczytywany ...
+	-firstClickHandler kontroluje przypadek pierwszego kliknięcia i git, nie potrzeba wiedzieć co tam robi albo w jakim wypadku
+
+DZIEDZICZENIA:
+	-Wszystkie fieldy mają konstrukcje Field + swoje wartości
+		dziedziczą virtualne metody
+
+POLIMORFIZM:
+	-Metody między SafeField a BombField się zachowują inaczej np. hasBomb zwraca odwrotne wartości boolowskie
+																   setNumofBombsDirect dla BombField jest tylko formalnością
