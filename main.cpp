@@ -62,6 +62,7 @@ int main(int argc, char*argv[]) {
     
     std::vector<std::vector<sf::Sprite>> Sprites(ROW, std::vector<sf::Sprite>(COL, sf::Sprite(Blank)));
     Board gameBoard(ROW, COL, BOMBS);
+    window.setFramerateLimit(60);
     int firstClickFLag=1;
 
     for (int x = 0; x < ROW; x++) {
